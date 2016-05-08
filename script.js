@@ -1,15 +1,3 @@
-/** This is the main function that is called
-at the highest level. It calls several of the helper
-functions in the program in order to generate the desired
-array of Hexominos.
-*/
-var returnPolyOminos = function (num) {
-
-	if(typeof num === "number" && num === 0) {
-		return piece(0, 0);
-	}
-
-}
 
 /** Object constructor that creates a point and returns it.
 */
@@ -25,31 +13,80 @@ var Point = function(x, y) {
 together represent a piece. It returns a point array which is 
 an array of points. 
 */
-var piece = function() {
+var Piece = function() {
 
-	var i,
-		pointArray = [];
+	var i;
+
+	//a piece has an array of points.
+	this.pointArray = [];
 
 	for(i = 0; i < arguments.length; i += 2) {
 		pointArray[i/2] = Point(arguments[i], arguments[i+1]); 
 	}
 
-	return pointArray;
+	return this;
+}
+
+/** This is the main function that is called
+at the highest level. It calls several of the helper
+functions in the program in order to generate the desired
+array of Hexominos.
+*/
+var returnPolyominos = function (num) {
+
+	if(typeof num != "number") {
+		console.log("For some reason what you entered is not a number.");
+		return;
+	}
+
+	return generatePolyominos(num);
+
+}
+
+/** This is the actual function that calls around everything. 
+It is the "powerhouse of the cell" lol.
+It returns an array of pieces. 
+*/
+var generatePolyominos = function(num) {
+
+	if(num === 0) {
+
+		var pieceArray = [];
+		pieceArray[0] = Piece(0, 0);
+		return pieceArray; 
+	
+	}
+
+	var i,
+		j,
+		piece,
+		newPolyminos = [],
+		prevPolyominos = generatePolyominos(num - 1); //recursivve call here!!
+
+	for(i = 0; i < prevPolyominos.length; i++) {
+		//what to do for each piece in the pieceArray?
+		piece = prevPolyominos[i];
+		for(j = 0; j < piece.pointArray.length; j++) {
+			//what to do for each square for each piece?
+		}
+	}
+
+	return newPolyminos;
 }
 
 /** Takes a list of points that represent a polyomino and 
 returns the array after performing a matrix rotation on the 
 set of points that are passed in. 
 */
-var rotatePointsClockWise = function(pointArray) {
+var rotatePointsClockWise = function(piece) {
 
 	var i;
 
-	for(i = 0; i < pointArray.length; i++) {
-		pointArray[i] = Point(pointArray[i].y, -pointArray[i].x);
+	for(i = 0; i < piece.pointArray.length; i++) {
+		piece.pointArray[i] = Point(piece.pointArray[i].y, -piece.pointArray[i].x);
 	}
 
-	return pointArray;
+	return piece;
 
 }
 
@@ -57,15 +94,15 @@ var rotatePointsClockWise = function(pointArray) {
 the matrix vertical flip operation on each one of the points and 
 returns an array of points. 
 */
-var flipPointsVertically = function(pointArray) {
+var flipPointsVertically = function(piece) {
 	
 	var i;
 
-	for(i = 0; i < pointArray.length; i++) {
-		pointArray[i] = Point(-pointArray[i].x, pointArray[i].y);
+	for(i = 0; i < piece.pointArray.length; i++) {
+		piece.pointArray[i] = Point(-piece.pointArray[i].x, piece.pointArray[i].y);
 	}
 
-	return pointArray;
+	return piece;
 
 }
 
@@ -73,14 +110,14 @@ var flipPointsVertically = function(pointArray) {
 the matrix horizontal flip operation on each one of the poitns and
 returns an array of points. 
 */
-var flipPointsHorizontally = function(pointArray) {
+var flipPointsHorizontally = function(piece) {
 
 	var i;
 
-	for(i = 0; i < pointArray.length; i++) {
-		pointArray[i] = Point(pointArray[i].x, -pointArray[i].y);
+	for(i = 0; i < piece.pointArray.length; i++) {
+		piece.pointArray[i] = Point(piece.pointArray[i].x, -piece.pointArray[i].y);
 	}
 
-	return pointArray;
+	return piece;
 
 }
