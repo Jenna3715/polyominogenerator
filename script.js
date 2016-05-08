@@ -6,7 +6,6 @@ var Point = function(x, y) {
 	this.x = x;
 	this.y = y;
 	return this;
-
 }
 
 /** Object constructor that creates a list of points that when
@@ -40,7 +39,6 @@ var returnPolyominos = function (num) {
 	}
 
 	return generatePolyominos(num);
-
 }
 
 /** This is the actual function that calls around everything. 
@@ -54,13 +52,12 @@ var generatePolyominos = function(num) {
 		var pieceArray = [];
 		pieceArray[0] = Piece(0, 0);
 		return pieceArray; 
-	
 	}
 
 	var i,
 		j,
 		piece,
-		newPolyminos = [],
+		newPolyominos = [],
 		prevPolyominos = generatePolyominos(num - 1); //recursivve call here!!
 
 	for(i = 0; i < prevPolyominos.length; i++) {
@@ -68,6 +65,17 @@ var generatePolyominos = function(num) {
 		piece = prevPolyominos[i];
 		for(j = 0; j < piece.pointArray.length; j++) {
 			//what to do for each square for each piece?
+
+			/*
+			For each point in the piece, add a new point to the left and bottom
+			For each newly created piece check if the newPolyominos array already contains it
+			If not then append it
+
+			Then flip it horizontally and repeat the same procedure
+
+			Then flip it vertically and repeat the same procedure
+			*/
+			pointArray[j]
 		}
 	}
 
@@ -87,7 +95,6 @@ var rotatePointsClockWise = function(piece) {
 	}
 
 	return piece;
-
 }
 
 /** Takes a list of points that represent a polyomino. Performs
@@ -103,7 +110,6 @@ var flipPointsVertically = function(piece) {
 	}
 
 	return piece;
-
 }
 
 /** Takes a list of points that represent a polyomino. Performs
@@ -119,5 +125,4 @@ var flipPointsHorizontally = function(piece) {
 	}
 
 	return piece;
-
 }
