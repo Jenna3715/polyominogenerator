@@ -3,11 +3,10 @@ at the highest level. It calls several of the helper
 functions in the program in order to generate the desired
 array of Hexominos.
 */
-var returnPolyOminos = function (n) {
+var returnPolyOminos = function (num) {
 
-	var numPolyomino = 0;
-	while(numPolyomino < n) {
-
+	if(typeof num === "number" && num === 0) {
+		return piece(0, 0);
 	}
 
 }
@@ -20,6 +19,22 @@ var Point = function(x, y) {
 	this.y = y;
 	return this;
 
+}
+
+/** Object constructor that creates a list of points that when
+together represent a piece. It returns a point array which is 
+an array of points. 
+*/
+var piece = function() {
+
+	var i,
+		pointArray = [];
+
+	for(i = 0; i < arguments.length; i += 2) {
+		pointArray[i/2] = Point(arguments[i], arguments[i+1]); 
+	}
+
+	return pointArray;
 }
 
 /** Takes a list of points that represent a polyomino and 
