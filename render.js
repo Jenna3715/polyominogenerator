@@ -1,6 +1,6 @@
 (function() {
 	//set the width and height
-	var width = 1000,
+	var width = 3000,
 	  height = 1000;
 
 	//selection for adding the svg
@@ -12,9 +12,10 @@
 
 	//console.log(generatePolyominos(1)[0].x);
 
-	var polyOminos = generatePolyominos(1);
+	var polyOminos = generatePolyominos(3);
+  console.log(polyOminos);
 
-  renderPiece(polyOminos[0], 350, 350, 40, 40);
+  renderAllPieces(polyOminos, 30, 100, 40, 40);
 
   /**
   * This is the function responsible for rendering a piece.
@@ -46,13 +47,14 @@
 
   }
 
-  // function renderAllPieces(polyOminos, ) {
+  function renderAllPieces(polyOminos, startX, startY, height, width) {
 
-  //   var n = polyOminos[0].pointArray.length;
+    var n = polyOminos[0].pointArray.length;
 
-  //   for(var i = 0; i < polyOminos.length; i++) {
-  //     polyOminos[i].renderPiece()
-  //   }
-  // }
+    for(var i = 0; i < polyOminos.length; i++) {
+      renderPiece(polyOminos[i], startX + i * n * width + i * 5, startY, height, width);
+    }
+
+  }
 
 }());

@@ -30,6 +30,20 @@ var Piece = function() {
 	};
 }
 
+ var PieceSpecial = function(array) {
+
+ 	var pointArray = [];
+
+ 	for(var i = 0; i < array.length; i += 2) {
+ 		pointArray.push(Point(array[i], array[i+1]));
+ 	}
+
+ 	return {
+ 		pointArray: pointArray
+ 	};
+
+ }
+
 /*------------------------------------------------------------
 					ALGORITHMIC OPERATIONS
 ------------------------------------------------------------*/
@@ -61,33 +75,41 @@ var generatePolyominos = function(num) {
 		return pieceArray; 
 	}
 
-	var i,
-		j,
-		piece,
-		newPolyominos = [];
+	var newPolyominos = [];
 		prevPolyominos = generatePolyominos(num - 1); //recursive call here!!
 
-	if(num === 1) {
-		newPolyominos = prevPolyominos;
+
+	for(var i = 0; i < prevPolyominos.length; i++) {
+		var polycopy = copyPolyomino(prevPolyominos[i]);
+		for(var j = 0; j < polycopy.pointArray.length; j++) {
+			for(var k = 0 ; k < 2; k++) {
+				if(k === 0) {
+					var newpoint = Point(polycopy.pointArray[j].x + 1, polycopy.pointArray[j].y);
+					if(pointArrayContains(newpoint, polycopy.pointArray)) continue;
+					var newPointArray = copyPointArray(polycopy.pointArray);
+					newPointArray.push(newpoint);
+					var newPiece = {
+						pointArray: newPointArray
+					};
+					if(!PieceContains(newPiece, newPolyominos)) {
+						newPolyominos.push(newPiece);
+					}
+				} else {
+					var newpoint = Point(polycopy.pointArray[j].x, polycopy.pointArray[j].y + 1);
+					if(pointArrayContains(newpoint, polycopy.pointArray)) continue;
+					var newPointArray = copyPointArray(polycopy.pointArray);
+					newPointArray.push(newpoint);
+					var newPiece = {
+						pointArray: newPointArray
+					};
+					if(!PieceContains(newPiece, newPolyominos)) {
+						newPolyominos.push(newPiece);
+					}
+				}
+			}
+		}
 	}
-	// for(i = 0; i < prevPolyominos.length; i++) {
-	// 	//what to do for each piece in the pieceArray?
-	// 	piece = prevPolyominos[i];
-	// 	for(j = 0; j < piece.pointArray.length; j++) {
-	// 		//what to do for each square for each piece?
 
-			
-	// 		For each point in the piece, add a new point to the left and bottom
-	// 		For each newly created piece check if the newPolyominos array already contains it
-	// 		If not then append it
-
-	// 		Then flip it horizontally and repeat the same procedure
-
-	// 		Then flip it vertically and repeat the same procedure
-			
-	// 		pointArray[j]
-	// 	}
-	// }
 	return newPolyominos;
 }
 
@@ -144,7 +166,9 @@ var flipPointsHorizontally = function(piece) {
 Returns a boolean indicating whether two pieces are equal.
 At this point (! lol, I'm hilarious), it only checks if both 
 the arrays contain the same set of points. IE, both pieces' 
-point sets must have the same elements.
+point sets must have the same elements. It unforunately does
+NOT do the rotation and everything to check for equality. What
+a bummer!
 */
 var pieceEquals = function(pieceA, pieceB) {
 
@@ -153,6 +177,7 @@ var pieceEquals = function(pieceA, pieceB) {
 
 	//they can't be equal if they are different sizes!
 	if (pointArrayA.length !== pointArrayB.length) {
+		alert("You stupid! The pieces aren't even the same kind!")
 		return false;
 	}
 
@@ -180,4 +205,40 @@ var pointArrayContains = function (point, pointArray) {
 //determines if two points are equal.
 var pointsEqual = function(pointA, pointB) {
 	return pointA.x === pointB.x && pointA.y === pointB.y;
+}
+
+//create a new copy of the polyomino
+var copyPolyomino = function(polyomino) {
+	var array = copyPointArray(polyomino.pointArray);
+	var numArray = [];
+
+	for(var i = 0; i < array.length; i++) {
+		numArray.push(array[i].x);
+		numArray.push(array[i].y);
+	}
+
+	var copiedPiece = PieceSpecial(numArray);
+
+	return copiedPiece;
+}
+
+//create a new copy of the point array
+var copyPointArray = function(pointArray) {
+	var newArray = [];
+	for(var i = 0; i < pointArray.length; i++) {
+		newArray.push(Point(pointArray[i].x, pointArray[i].y));
+	}
+
+	return newArray;
+}
+
+//determines if piece array contains the given piece.
+var PieceContains = function(Piece, pieceArray) {
+	for(var i = 0; i < pieceArray.length; i++) {
+		if(pieceEquals(Piece, pieceArray[i])) {
+			return true;
+		}
+	}
+
+	return false;
 }
