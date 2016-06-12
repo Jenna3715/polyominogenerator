@@ -68,7 +68,7 @@ It returns an array of pieces.
 */
 var generatePolyominos = function(num) {
 
-	if(num === 0) {
+	if(num === 1) {
 
 		var pieceArray = [];
 		pieceArray[0] = Piece(0, 0);
@@ -168,26 +168,37 @@ At this point (! lol, I'm hilarious), it only checks if both
 the arrays contain the same set of points. IE, both pieces' 
 point sets must have the same elements. It unforunately does
 NOT do the rotation and everything to check for equality. What
-a bummer!
+a bummer! 
+TODO, get it to do check after rotation.
+	, get it to check after flip.
+	, properly test that equals works.
 */
 var pieceEquals = function(pieceA, pieceB) {
 
-	var pointArrayA = pieceA.pointArray,
-	pointArrayB = pieceB.pointArray;
+	var pieceARotated = rotatePointsClockWise(copyPolyomino(pieceA)),
+	pieceARotatedTwice = rotatePointsClockWise(copyPolyomino(pieceARotated)),
+	pieceARotatedThrice = rotatePointsClockWise(copyPolyomino(pieceARotatedTwice)),
+	pieceAFlippedVertically = flipPointsVertically(copyPolyomino(pieceA)),
+	pieceAFlippedHorizontally = flipPointsHorizontally(copyPolyomino(pieceA)),
+	pointArrayA = pieceA.pointArray,
+	pointArrayB = pieceB.pointArray,
+	pointArrayARotated = normalizePoints(pieceARotated.pointArray),
+	pointArrayARotatedTwice = normalizePoints(pieceARotatedTwice.pointArray),
+	pointArrayARotatedThrice = normalizePoints(pieceARotatedThrice.pointArray),
+	pointArrayAFlippedVertically = normalizePoints(pieceAFlippedVertically.pointArray),
+	pointArrayAFlippedHorizontally = normalizePoints(pieceAFlippedHorizontally.pointArray);
 
-	//they can't be equal if they are different sizes!
-	if (pointArrayA.length !== pointArrayB.length) {
-		alert("You stupid! The pieces aren't even the same kind!")
-		return false;
-	}
-
-	for(var i = 0; i < pointArrayA.length; i++) {
-		if(!pointArrayContains(pointArrayA[i], pointArrayB)) {
-			return false;
-		}
-	}
-
-	return true;
+	return  samePointArray(pointArrayA, pointArrayB)
+			||
+			samePointArray(pointArrayARotated, pointArrayB)
+			||
+			samePointArray(pointArrayARotatedTwice, pointArrayB)
+			||
+			samePointArray(pointArrayARotatedThrice, pointArrayB)
+			||
+			samePointArray(pointArrayAFlippedHorizontally, pointArrayB)
+			||
+			samePointArray(pointArrayAFlippedVertically, pointArrayB);
 
 }
 
@@ -241,4 +252,50 @@ var PieceContains = function(Piece, pieceArray) {
 	}
 
 	return false;
+}
+
+var samePointArray = function(pointArrayA, pointArrayB) {
+	//they can't be equal if they are different sizes!
+	if (pointArrayA.length !== pointArrayB.length) {
+		alert("You stupid! The pieces aren't even the same kind!")
+		return false;
+	}
+
+	for(var i = 0; i < pointArrayA.length; i++) {
+		if(!pointArrayContains(pointArrayA[i], pointArrayB)) {
+			return false;
+		}
+	}
+
+	return true;
+
+}
+
+var normalizePoints = function(pointArray) {
+	var minX = Number.POSITIVE_INFINITY,
+	minY = Number.POSITIVE_INFINITY;
+
+	for(var i = 0; i < pointArray.length; i++) {
+		if(pointArray[i].x < minX) {
+			minX = pointArray[i].x;
+		}
+
+		if(pointArray[i].y < minY) {
+			minY = pointArray[i].y;
+		}
+	}
+
+	if(minX < 0) {
+		for(var i = 0; i < pointArray.length; i++) {
+			pointArray[i].x += (-minX);
+		}
+	}
+
+	if(minY < 0) {
+		for(var i = 0; i < pointArray.length; i++) {
+			pointArray[i].y += (-minY);
+		}
+	}
+
+	return pointArray;
 }

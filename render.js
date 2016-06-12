@@ -12,10 +12,10 @@
 
 	//console.log(generatePolyominos(1)[0].x);
 
-	var polyOminos = generatePolyominos(3);
+	var polyOminos = generatePolyominos(6);
   console.log(polyOminos);
 
-  renderAllPieces(polyOminos, 30, 100, 40, 40);
+  renderAllPieces(polyOminos, 30, 100, 10, 10);
 
   /**
   * This is the function responsible for rendering a piece.
