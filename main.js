@@ -69,19 +69,43 @@ It returns an array of pieces.
 var generatePolyominos = function(num) {
 	//base case for the recursive function
 	if(num === 1) {
-
 		var pieceArray = [];
 		pieceArray[0] = Piece(0, 0);
 		return pieceArray; 
 	}
 
 	var newPolyominos = [],
-		prevPolyominos = generatePolyominos(num - 1); //recursive call here!!
+	prevPolyominos = generatePolyominos(num - 1); //recursive call here!!
 
 
 	for(var i = 0; i < prevPolyominos.length; i++) {
-		var polycopy = copyPolyomino(prevPolyominos[i]);
-		for(var j = 0; j < polycopy.pointArray.length; j++) {
+		var testPolyominos = [];
+		testPolyominos.push(copyPolyomino(prevPolyominos[i]));
+		testPolyominos.push(rotatePointsClockWise(copyPolyomino(prevPolyominos[i])));
+		testPolyominos.push(flipPointsVertically(rotatePointsClockWise(copyPolyomino(prevPolyominos[i]))));
+		testPolyominos.push(flipPointsHorizontally(rotatePointsClockWise(copyPolyomino(prevPolyominos[i]))));
+		
+		testPolyominos.push(rotatePointsClockWise(rotatePointsClockWise(copyPolyomino(prevPolyominos[i]))));
+		testPolyominos.push(flipPointsVertically(rotatePointsClockWise(rotatePointsClockWise(copyPolyomino(prevPolyominos[i])))));
+		testPolyominos.push(flipPointsHorizontally(rotatePointsClockWise(rotatePointsClockWise(copyPolyomino(prevPolyominos[i])))));
+
+		testPolyominos.push(rotatePointsClockWise(rotatePointsClockWise(rotatePointsClockWise(copyPolyomino(prevPolyominos[i])))));
+		testPolyominos.push(flipPointsVertically(rotatePointsClockWise(rotatePointsClockWise(rotatePointsClockWise(copyPolyomino(prevPolyominos[i]))))));
+		testPolyominos.push(flipPointsHorizontally(rotatePointsClockWise(rotatePointsClockWise(rotatePointsClockWise(copyPolyomino(prevPolyominos[i]))))));
+
+		for(var j = 0; j < testPolyominos.length; j++) {
+			testPolyominos[j] = normalizePolyomino(testPolyominos[j]);
+			newPolyominos = checkAndAddNewPiece(testPolyominos[j], newPolyominos);
+		}
+	}
+
+	return newPolyominos;
+}
+
+
+var checkAndAddNewPiece = function(polycopy, newPolyominos) {
+	
+	for(var j = 0; j < polycopy.pointArray.length; j++) {
 			for(var k = 0 ; k < 2; k++) {
 				if(k === 0) {
 					var newpoint = Point(polycopy.pointArray[j].x + 1, polycopy.pointArray[j].y);
@@ -108,11 +132,9 @@ var generatePolyominos = function(num) {
 				}
 			}
 		}
-	}
 
 	return newPolyominos;
 }
-
 /*------------------------------------------------------
                    PIECE MUTATORS
 --------------------------------------------------------
@@ -173,13 +195,26 @@ var pieceEquals = function(pieceA, pieceB) {
 	pieceARotatedThrice = rotatePointsClockWise(copyPolyomino(pieceARotatedTwice)),
 	pieceAFlippedVertically = flipPointsVertically(copyPolyomino(pieceA)),
 	pieceAFlippedHorizontally = flipPointsHorizontally(copyPolyomino(pieceA)),
+	pieceAR1FV = flipPointsVertically(rotatePointsClockWise(copyPolyomino(pieceA))),
+	pieceAR1FH = flipPointsHorizontally(rotatePointsClockWise(copyPolyomino(pieceA))),
+	pieceAR2FV = flipPointsVertically(rotatePointsClockWise(copyPolyomino(pieceARotated))),
+	pieceAR2FH = flipPointsHorizontally(rotatePointsClockWise(copyPolyomino(pieceARotated))),
+	pieceAR3FV = flipPointsVertically(rotatePointsClockWise(copyPolyomino(pieceARotatedTwice))),
+	pieceAR3FH = flipPointsHorizontally(rotatePointsClockWise(copyPolyomino(pieceARotatedTwice))),
 	pointArrayA = pieceA.pointArray,
 	pointArrayB = pieceB.pointArray,
 	pointArrayARotated = normalizePoints(pieceARotated.pointArray),
 	pointArrayARotatedTwice = normalizePoints(pieceARotatedTwice.pointArray),
 	pointArrayARotatedThrice = normalizePoints(pieceARotatedThrice.pointArray),
 	pointArrayAFlippedVertically = normalizePoints(pieceAFlippedVertically.pointArray),
-	pointArrayAFlippedHorizontally = normalizePoints(pieceAFlippedHorizontally.pointArray);
+	pointArrayAFlippedHorizontally = normalizePoints(pieceAFlippedHorizontally.pointArray),
+	pointArrayAR1FV = normalizePoints(pieceAR1FV.pointArray),
+	pointArrayAR1FH = normalizePoints(pieceAR1FH.pointArray),
+	pointArrayAR2FV = normalizePoints(pieceAR2FV.pointArray),
+	pointArrayAR2FH = normalizePoints(pieceAR2FH.pointArray),
+	pointArrayAR3FV = normalizePoints(pieceAR3FV.pointArray),
+	pointArrayAR3FH = normalizePoints(pieceAR3FH.pointArray);
+
 
 	return  samePointArray(pointArrayA, pointArrayB)
 			||
@@ -191,8 +226,19 @@ var pieceEquals = function(pieceA, pieceB) {
 			||
 			samePointArray(pointArrayAFlippedHorizontally, pointArrayB)
 			||
-			samePointArray(pointArrayAFlippedVertically, pointArrayB);
-
+			samePointArray(pointArrayAFlippedVertically, pointArrayB)
+			||
+			samePointArray(pointArrayAR1FV, pointArrayB)
+			||
+			samePointArray(pointArrayAR1FH, pointArrayB)
+			||
+			samePointArray(pointArrayAR2FV, pointArrayB)
+			||
+			samePointArray(pointArrayAR2FH, pointArrayB)
+			||
+			samePointArray(pointArrayAR3FV, pointArrayB)
+			||
+			samePointArray(pointArrayAR3FH, pointArrayB);
 }
 
 //determines if a point array contains the point.
@@ -291,4 +337,10 @@ var normalizePoints = function(pointArray) {
 	}
 
 	return pointArray;
+}
+
+var normalizePolyomino = function(piece) {
+	return {
+		pointArray: normalizePoints(piece.pointArray)
+	}
 }
