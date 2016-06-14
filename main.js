@@ -67,7 +67,7 @@ It is the "powerhouse of the cell" lol.
 It returns an array of pieces. 
 */
 var generatePolyominos = function(num) {
-
+	//base case for the recursive function
 	if(num === 1) {
 
 		var pieceArray = [];
@@ -75,7 +75,7 @@ var generatePolyominos = function(num) {
 		return pieceArray; 
 	}
 
-	var newPolyominos = [];
+	var newPolyominos = [],
 		prevPolyominos = generatePolyominos(num - 1); //recursive call here!!
 
 
@@ -164,14 +164,7 @@ var flipPointsHorizontally = function(piece) {
 
 /** 
 Returns a boolean indicating whether two pieces are equal.
-At this point (! lol, I'm hilarious), it only checks if both 
-the arrays contain the same set of points. IE, both pieces' 
-point sets must have the same elements. It unforunately does
-NOT do the rotation and everything to check for equality. What
-a bummer! 
-TODO, get it to do check after rotation.
-	, get it to check after flip.
-	, properly test that equals works.
+At this point (! lol, I'm hilarious).
 */
 var pieceEquals = function(pieceA, pieceB) {
 
