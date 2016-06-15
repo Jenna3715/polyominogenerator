@@ -1,21 +1,4 @@
-(function() {
-	//set the width and height
-	var width = window.innerWidth,
-	  height = 3000;
-
-	//selection for adding the svg
-	var chart = d3.select("#vis")
-	.attr("width", width)
-	.attr("height", height);
-
-	//console.log(generatePolyominos(1));
-
-	//console.log(generatePolyominos(1)[0].x);
-
-	var polyOminos = generatePolyominos(6);
-  	console.log(polyOminos);
-
-  	renderAllPieces(polyOminos, 30, 100, 20, 20);
+renderPolyomino = function(chart) {
 
   /**
   * This is the function responsible for rendering a piece.
@@ -47,16 +30,26 @@
 
   }
 
-  function renderAllPieces(polyOminos, startX, startY, height, width) {
+  //loops through all pieces and prints each polyomino
+  this.renderAllPieces = function(polyOminos, startX, startY, squareHeight, squareWidth) {
 
     var n = polyOminos[0].pointArray.length;
 
-    var piecesPerRow = Math.floor(window.innerWidth / (n * width));
+    var piecesPerRow = Math.floor(window.innerWidth / (n * squareWidth));
+
+        //set the width and height
+	chart.attr("width", window.innerWidth)
+	.attr("height", (polyOminos.length/piecesPerRow + 2) * squareHeight * n);
 
     for(var i = 0; i < polyOminos.length; i++) {
-      renderPiece(polyOminos[i], startX + (i % piecesPerRow) * n * width, startY + Math.floor(((i) / piecesPerRow)) * n * height, height, width);
+
+	var polyominoStartX = startX + (i % piecesPerRow) * n * squareWidth,
+	polyominoStartY = startY + Math.floor(i / piecesPerRow) * n * squareHeight;
+	renderPiece(polyOminos[i], polyominoStartX, polyominoStartY, squareHeight, squareWidth);
+
     }
 
   }
 
-}());
+  return this;
+};

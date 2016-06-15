@@ -4,8 +4,7 @@
 	<link rel="stylesheet" type="text/css" href="styles.css">
 	<script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 	<script src = "main.js"></script>
-	
-	
+	<script src = "render.js"></script>	
 </head>
 
 <body>
@@ -18,6 +17,20 @@
 	</p> -->
 
 <svg id = 'vis'></svg>
-<script src = "render.js"></script>
+
+<script>
+
+var chart = d3.select('#vis');
+
+//main call to the generation algorithm
+var polyOminos = polyominoGenerator.returnPolyominos(7);
+
+console.log(polyOminos);
+
+//graphically render all the pieces that are gene
+renderPolyomino(chart).renderAllPieces(polyOminos, 30, 100, 20, 20);
+
+</script>
+
 </body>
 </html>

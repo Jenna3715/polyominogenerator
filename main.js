@@ -1,3 +1,4 @@
+polyominoGenerator = function() {
 /**----------------------------------------------------------
 				MODEL ELEMENT CONSTRUCTORS
 ------------------------------------------------------------*/
@@ -52,7 +53,7 @@ at the highest level. It calls several of the helper
 functions in the program in order to generate the desired
 array of Hexominos.
 */
-var returnPolyominos = function (num) {
+this.returnPolyominos = function (num) {
 
 	if(typeof num != "number") {
 		console.log("For some reason what you entered is not a number.");
@@ -344,3 +345,6 @@ var normalizePolyomino = function(piece) {
 		pointArray: normalizePoints(piece.pointArray)
 	}
 }
+
+return this;
+}();
