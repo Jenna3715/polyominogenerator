@@ -1,2 +1,2 @@
 # polyominogenerator
-Web application that generates all possible polyominos for a given 'n'.
+A minimalistic web application that implements a polyomino generating algorithm using SVG elements to render shapes on the screen. 
