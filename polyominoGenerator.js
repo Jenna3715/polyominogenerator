@@ -103,7 +103,11 @@ var generatePolyominos = function(num) {
 	return newPolyominos;
 }
 
-
+/**
+Creates all possible pieces generatable from the passed in (n-1) polyomino
+and determines if that piece already exists in the newPolyominos array and 
+updates the newPolyominos array with the freshly generated piece.
+*/
 var checkAndAddNewPiece = function(polycopy, newPolyominos) {
 	
 	for(var j = 0; j < polycopy.pointArray.length; j++) {
@@ -136,6 +140,8 @@ var checkAndAddNewPiece = function(polycopy, newPolyominos) {
 
 	return newPolyominos;
 }
+
+
 /*------------------------------------------------------
                    PIECE MUTATORS
 --------------------------------------------------------
@@ -185,9 +191,13 @@ var flipPointsHorizontally = function(piece) {
 	return piece;
 }
 
-/** 
+
+/*--------------------------------------------------------
+*					PIECE HELPERS 
+---------------------------------------------------------*/
+
+/*
 Returns a boolean indicating whether two pieces are equal.
-At this point (! lol, I'm hilarious).
 */
 var pieceEquals = function(pieceA, pieceB) {
 
@@ -294,6 +304,7 @@ var PieceContains = function(Piece, pieceArray) {
 	return false;
 }
 
+//check if the two point arrays are the same
 var samePointArray = function(pointArrayA, pointArrayB) {
 	//they can't be equal if they are different sizes!
 	if (pointArrayA.length !== pointArrayB.length) {
@@ -311,6 +322,7 @@ var samePointArray = function(pointArrayA, pointArrayB) {
 
 }
 
+//make sure there's no polyomino that's going out of the grid
 var normalizePoints = function(pointArray) {
 	var minX = Number.POSITIVE_INFINITY,
 	minY = Number.POSITIVE_INFINITY;
@@ -340,6 +352,7 @@ var normalizePoints = function(pointArray) {
 	return pointArray;
 }
 
+//normalize the polyomino and return a new piece.
 var normalizePolyomino = function(piece) {
 	return {
 		pointArray: normalizePoints(piece.pointArray)
@@ -347,4 +360,5 @@ var normalizePolyomino = function(piece) {
 }
 
 return this;
-}();
+
+};
