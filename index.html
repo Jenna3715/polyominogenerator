@@ -9,19 +9,62 @@
 
 <body>
 
+<h1>Polyomino Generator</h1>
+
+<p>Hi! This minimalistic web app implements an algorithm that I came up with in a class that I took at WPI. It generates all free <i>n</i> polyominos for any given "n". The algorithm is very heavy and uses recursion as well. While technically the algorithm would work for any generic <i>n</i> do not expect it to generate polyominos beyond the set of octominos in a reasonable time-frame. I haven't tested the murky waters of "8+" polyominos yet! I apologize in advance, but hey, I doubt there exists a far better algorithm in the wild!
+</p>
+
+<p>For an in depth, but informal analysis of the algorithm along with some performance analytics of the browsers running it, go to my <a>blog</a> here!
+</p>
+
+<form name='numInput' id='numInput'>
+  <input type='text' name='answer'>
+  <input type='submit' value='Submit'>
+</form>
+
 <svg id = 'vis'></svg>
 
 <script>
 
+d3.select('#numInput').on('submit', submitCheck);
+
+function submitCheck() {
+	d3.event.preventDefault();
+
+	if(validateForm) {
+		var svg = d3.select("svg");
+    	svg.selectAll("*").remove();
+		genPoly(Number(document.forms["numInput"]["answer"].value));
+	}
+
+}
+
+//validate the user input
+function validateForm() {
+	var x = document.forms["numInput"]["answer"].value;
+	if (x === null || x === "" || isNaN(x)) {
+	  alert("Please enter an actual numerical value.");
+	  return false;
+	} 
+
+	if(Number(x) >= 11) {
+		alert("This might not work! You're on your own!");
+	}
+
+	return true;
+}
+
+function genPoly(n) {
 var chart = d3.select('#vis');
 
-//main call to the generation algorithm
-var polyOminos = polyominoGenerator().returnPolyominos(6);
+//main call to the generation algorithm.
+var polyOminos = polyominoGenerator().returnPolyominos(n);
 
 console.log(polyOminos);
 
-//graphically render all the pieces that are gene
+//graphically render all the pieces that are generated. 
 renderPolyomino(chart).renderAllPieces(polyOminos, 30, 100, 20, 20);
+}
 
 </script>
 

@@ -1,3 +1,11 @@
+/**
+This is the master function that you can call by passing in a d3 selected
+svg element on the HTML site. 
+It looks a little weird at the moment but I'm waiting for expert opinion
+on how something like this would typically be done. However, we know that it
+works now. Should be pretty straightforward to extend in the future. I admit,
+this "library" can be improved drastically.
+*/
 renderPolyomino = function(chart) {
 
   /**
@@ -37,16 +45,16 @@ renderPolyomino = function(chart) {
 
     var piecesPerRow = Math.floor(window.innerWidth / (n * squareWidth));
 
-        //set the width and height
-	chart.attr("width", window.innerWidth)
-	.attr("height", (polyOminos.length/piecesPerRow + 2) * squareHeight * n);
+    //set the width and height
+  	chart.attr("width", window.innerWidth)
+  	.attr("height", (polyOminos.length/piecesPerRow + 2) * squareHeight * n + 200);
 
     for(var i = 0; i < polyOminos.length; i++) {
 
-	var polyominoStartX = startX + (i % piecesPerRow) * n * squareWidth,
-	polyominoStartY = startY + Math.floor(i / piecesPerRow) * n * squareHeight;
-	renderPiece(polyOminos[i], polyominoStartX, polyominoStartY, squareHeight, squareWidth);
-
+  	var polyominoStartX = startX + (i % piecesPerRow) * n * squareWidth,
+  	polyominoStartY = startY + Math.floor(i / piecesPerRow) * n * squareHeight;
+  	
+    renderPiece(polyOminos[i], polyominoStartX, polyominoStartY, squareHeight, squareWidth);
     }
 
   }
