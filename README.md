@@ -1,2 +1,2 @@
-# polyominogenerator
-A minimalistic web application that implements a polyomino generating algorithm using d3 and SVG elements to render shapes on the screen. 
+# Polyomino Generator
+A minimalistic web application that implements a polyomino generating algorithm using d3 and SVG elements to render shapes on the screen. A working example is available to check out <a href = "http://kartikvasu.github.io/blog/2016/06/16/polyomino-generator">here</a>. Stay tuned for a link to the blog post that analyzes the extremely <b>slow</b> algorithm that powers the app. 
