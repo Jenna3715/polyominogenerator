@@ -68,17 +68,19 @@ It is the "powerhouse of the cell" lol.
 It returns an array of pieces. 
 */
 var generatePolyominos = function(num) {
+	var start_time = Date.now();
 	//base case for the recursive function
 	if(num === 1) {
 		var pieceArray = [];
 		pieceArray[0] = Piece(0, 0);
+		var end_time = Date.now();
+		console.log(num, '-omino took: ', end_time - start_time, 'milliseconds');
 		return pieceArray; 
 	}
 
 	var newPolyominos = [],
 	prevPolyominos = generatePolyominos(num - 1); //recursive call here!!
-
-
+	
 	for(var i = 0; i < prevPolyominos.length; i++) {
 		var testPolyominos = [];
 		testPolyominos.push(copyPolyomino(prevPolyominos[i]));
@@ -100,6 +102,8 @@ var generatePolyominos = function(num) {
 		}
 	}
 
+	var end_time = Date.now();
+	console.log(num, '-omino took: ', end_time - start_time, 'milliseconds');
 	return newPolyominos;
 }
 
