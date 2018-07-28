@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <head>
+	<meta charset="UTF-8">
 	<title>Polyomino Generator</title>
 	<link rel="stylesheet" type="text/css" href="styles.css">
-	<script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 	<script src = "JS/polyominoGenerator.js"></script>
 	<script src = "JS/renderPolyomino.js"></script>	
 </head>
@@ -17,53 +17,45 @@
 <p>For an in depth, but informal analysis of the algorithm along with some performance analytics of the browsers running it, go to my <a>blog</a> here!
 </p>
 
-<form name='numInput' id='numInput'>
-  <input type='text' name='answer'>
-  <input type='submit' value='Submit'>
+<form target="null">
+	<input type="number" id="answer" min="0">
+	<button type="button" id="submitbutton" onclick="submitCheck()">Submit</button>
+	<input type="checkbox" id="usefixtoggle">
 </form>
 
-<svg id = 'vis'></svg>
+<svg id = "vis"  xmlns="http://www.w3.org/2000/svg"></svg>
 
 <script>
-
-d3.select('#numInput').on('submit', submitCheck);
+document.getElementById("submitbutton").onclick=submitCheck;
+var fixbox = document.getElementById("usefixtoggle");
 
 function submitCheck() {
-	d3.event.preventDefault();
-
-	if(validateForm) {
-		var svg = d3.select("svg");
-    	svg.selectAll("*").remove();
-		genPoly(Number(document.forms["numInput"]["answer"].value));
+	var value = document.getElementById("answer").value;
+	if((()=>{
+			if (value === null || value === "" || isNaN(value)) {
+				alert("Please enter an actual numerical value.");
+				return false;
+			} 
+			if(value >= 11)
+				alert("This might not work! You're on your own!");
+			return true;
+		})()
+	) {
+		genPoly(value, fixbox.checked);
 	}
-
+return false;;
 }
 
-//validate the user input
-function validateForm() {
-	var x = document.forms["numInput"]["answer"].value;
-	if (x === null || x === "" || isNaN(x)) {
-	  alert("Please enter an actual numerical value.");
-	  return false;
-	} 
-
-	if(Number(x) >= 11) {
-		alert("This might not work! You're on your own!");
-	}
-
-	return true;
-}
-
-function genPoly(n) {
-var chart = d3.select('#vis');
-
+function genPoly(n,fixed = fixbox.checked) {
+var chart = document.getElementById("vis");
+    	chart.innerHTML=""
+if(n<=0)return;
 //main call to the generation algorithm.
-var polyOminos = polyominoGenerator().returnPolyominos(n);
+var polyOminos = (fixed ? polyominoGenerator : polyominoGeneratorFixed).returnPolyominos(n);
 
-console.log(polyOminos);
 
 //graphically render all the pieces that are generated. 
-renderPolyomino(chart).renderAllPieces(polyOminos, 30, 100, 20, 20);
+renderPolyomino(chart).renderAllPieces(polyOminos, 30, 100, 20);
 }
 
 </script>
